@@ -25,7 +25,7 @@ class MultiTestTrialDataReader(object):
     Loads Ndx, enroll file and x-vectors to evaluate PLDA.
     """
 
-    def __init__(self, v_file, ndx_file, enroll_file, test_file, test_utt2orig_file,
+    def __init__(self, v_file, ndx_file, enroll_file, test_file, test_subseg2orig_file,
                  preproc, tlist_sep=' ', 
                  model_idx=1, num_model_parts=1, seg_idx=1, num_seg_parts=1,
                  eval_set='enroll-test'):
@@ -41,28 +41,28 @@ class MultiTestTrialDataReader(object):
         if ndx_file is not None:
             ndx = TrialNdx.load(ndx_file)
 
-        utt2orig = Utt2Info.load(test_utt2orig_file, sep=tlist_sep)
+        subseg2orig = Utt2Info.load(test_subseg2orig_file, sep=tlist_sep)
                 
         ndx, enroll = TrialNdx.parse_eval_set(ndx, enroll, test, eval_set)
         if num_model_parts > 1 or num_seg_parts > 1:
             ndx = TrialNdx.split(model_idx, num_model_parts, seg_idx, num_seg_parts)
             enroll = enroll.filter_info(ndx.model_set)
-            utt2orig =utt2orig.filter_info(ndx.seg_set)
+            subseg2orig =subseg2orig.filter_info(ndx.seg_set)
 
         self.enroll = enroll
         self.ndx = ndx
-        self.utt2orig = utt2orig
+        self.subseg2orig = subseg2orig
 
         
     def read(self):
         x_e = self.r.read(self.enroll.key, squeeze=True)
-        x_t = self.r.read(self.utt2orig.key, squeeze=True)
+        x_t = self.r.read(self.subseg2orig.key, squeeze=True)
     
         if self.preproc is not None:
             x_e = self.preproc.predict(x_e)
             x_t = self.preproc.predict(x_t)
 
-        return x_e, x_t, self.enroll.info, self.ndx, self.utt2orig.info
+        return x_e, x_t, self.enroll.info, self.ndx, self.subseg2orig.info
 
 
 
