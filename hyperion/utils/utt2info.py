@@ -254,7 +254,7 @@ class Utt2Info(object):
             filter_key = np.setdiff1d(self.utt_info[field], filter_key)
         f, _ = ismember(filter_key, self.utt_info[field])
         if not np.all(f):
-            for k in filter_key[f]:
+            for k in filter_key[f==False]:
                 logging.error('info %s not found in field %d' % (k,field))
             raise Exception('not all keys were found in field %d' % (field))
         
