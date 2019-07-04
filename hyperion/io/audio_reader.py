@@ -91,7 +91,8 @@ class AudioReader(object):
           wavspecifier: Shell command with pipe output
           scale:        Multiplies signal by scale factor
         """
-        proc = subprocess.Popen(wavspecifier, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        #proc = subprocess.Popen(wavspecifier, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        proc = subprocess.Popen(wavspecifier, shell=True, stdout=subprocess.PIPE)
         pipe = proc.communicate()[0]
         if proc.returncode !=0:
             raise Exception('Wave read pipe command %s returned code %d' % (wavspecifier, proc.returncode))
