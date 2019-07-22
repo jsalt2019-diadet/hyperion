@@ -154,7 +154,10 @@ class SequentialAudioReader(AudioReader):
         self.part_idx = part_idx
         self.num_parts = num_parts
         if self.num_parts > 1:
-            self.scp = self.scp.split(self.part_idx, self.num_parts)
+            if self.with_segments:
+                self.segments = self.segments.split(self.part_idx, self.num_parts)
+            else:
+                self.scp = self.scp.split(self.part_idx, self.num_parts)
 
 
         
