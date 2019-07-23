@@ -54,7 +54,7 @@ if [ $num_gpus -gt 0 ];then
     
     if [ ! -z "$free_gpu" ];then
 	# if free-gpu found set env var, otherwise we assume that you can use any gpu
-	sleep $[ ( $RANDOM % 60 )  + 1 ]s #avoids multiple programs trying to get the same gpu
+	#sleep $[ ( $RANDOM % 60 )  + 1 ]s #avoids multiple programs trying to get the same gpu (it didn't work)
 	export CUDA_VISIBLE_DEVICES=$($free_gpu -n $num_gpus)
     fi
 fi
