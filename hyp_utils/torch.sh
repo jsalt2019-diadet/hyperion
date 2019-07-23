@@ -7,7 +7,7 @@ if [ -f "path.sh" ];then
     # We run path.sh to be sure we have the right PATH
     . path.sh
 fi
-
+set -e
 num_gpus=0
 
 if [ "$1" == "--num-gpus" ];then
