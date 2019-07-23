@@ -42,16 +42,7 @@ fi
 
 #we activate conda env if TORCH var is not empty
 if [ ! -z "$TORCH" ];then
-    
     [ "$CONDA_VERS44" = true ] && conda activate $TORCH || source activate $TORCH
-    # if[ "$CONDA_VERS44" = true ];then
-    # 	# for conda version >= 4.4
-    # 	conda activate $TORCH
-    # else
-    # 	# for conda version < 4.4
-    # 	source activate $TORCH
-
-    # fi
 fi
 
 if [ $num_gpus -gt 0 ];then
@@ -63,6 +54,7 @@ if [ $num_gpus -gt 0 ];then
     
     if [ ! -z "$free_gpu" ];then
 	# if free-gpu found set env var, otherwise we assume that you can use any gpu
+	sleep $[ ( $RANDOM % 60 )  + 1 ]s #avoids multiple programs trying to get the same gpu
 	export CUDA_VISIBLE_DEVICES=$($free_gpu -n $num_gpus)
     fi
 fi
@@ -72,10 +64,4 @@ python "$@"
 
 if [ ! -z "$TORCH" ];then
     [ "$CONDA_VERS44" = true ] && conda deactivate || source deactivate
-    # if [ "$CONDA_VERS44" == true ];then
-    # 	conda deactivate
-
-    # else
-    # 	source deactivate
-    # fi
 fi
