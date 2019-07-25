@@ -61,8 +61,8 @@ class SegmentList(object):
         # logging.debug(len(self.segments['tbeg'][1:]-self.segments['tbeg'][:-1]>=0))
         # logging.debug(len(self.file_id[1:] != self.file_id[:-1]))
         assert np.all(self.segments['tend']-self.segments['tbeg']>=0)
-        assert np.all(np.logical_or(self.tbeg[1:]-self.tbeg[:-1]>=0,
-                                    self.file_id[1:] != self.file_id[:-1]))
+        #assert np.all(np.logical_or(self.tbeg[1:]-self.tbeg[:-1]>=0,
+        #                            self.file_id[1:] != self.file_id[:-1]))
                       
 
 
