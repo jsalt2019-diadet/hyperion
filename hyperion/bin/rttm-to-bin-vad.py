@@ -13,6 +13,7 @@ import os
 import argparse
 import time
 import logging
+import copy
 
 import numpy as np
 import pandas as pd
@@ -28,6 +29,7 @@ def rttm_to_bin_vad(rttm_file, num_frames_file, frame_shift, output_path, part_i
         utt2num_frames = pd.read_csv(num_frames_file, sep='\s+', header=None, names=['file_id','num_frames'], index_col=0)
 
     segments = RTTM.load(rttm_file).to_segment_list()
+    segments_orig = copy.deepcopy(segments)
     if num_parts  > 1:
         segments = segments.split(part_idx, num_parts)
 
@@ -42,8 +44,15 @@ def rttm_to_bin_vad(rttm_file, num_frames_file, frame_shift, output_path, part_i
                 file_id, num_speech_frames, num_frames, num_speech_frames/num_frames*100))
             writer.write(file_id, vad)
 
-            
-        
+        if part_idx == 1:
+            for file_id in utt2num_frames.file_id:
+                if not(file_id in segments_orig.uniq_file_id):
+                    logging.warning('not speeech detected in %s, putting all to 1' % (file_id))
+                    num_frames = int(utt2num_frames.loc[file_id]['num_frames'])
+                    vad = np.ones((num_frames,), dtype='float32')
+                    writer.write(file_id, vad)
+
+                
 if __name__ == "__main__":
 
     parser=argparse.ArgumentParser(
