@@ -45,7 +45,7 @@ def rttm_to_bin_vad(rttm_file, num_frames_file, frame_shift, output_path, part_i
             writer.write(file_id, vad)
 
         if part_idx == 1:
-            for file_id in utt2num_frames.file_id:
+            for file_id in utt2num_frames.index:
                 if not(file_id in segments_orig.uniq_file_id):
                     logging.warning('not speeech detected in %s, putting all to 1' % (file_id))
                     num_frames = int(utt2num_frames.loc[file_id]['num_frames'])
